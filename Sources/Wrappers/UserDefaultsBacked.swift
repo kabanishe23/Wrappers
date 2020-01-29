@@ -12,6 +12,12 @@ import Foundation
     public let defaultValue: Value
     public var storage: UserDefaults = .standard
     
+    public init(key: String, defaultValue: Value, storage: UserDefaults = .standard) {
+        self.key = key
+        self.defaultValue = defaultValue
+        self.storage = storage
+    }
+    
     public var wrappedValue: Value {
         set {
             if let optional = newValue as? AnyOptional, optional.isNil {
@@ -24,6 +30,12 @@ import Foundation
             let value = storage.value(forKey: key) as? Value
             return value ?? defaultValue
         }
+    }
+}
+
+public extension UserDefaultsBacked where Value: ExpressibleByNilLiteral {
+    init(key: String, storage: UserDefaults = .standard) {
+        self.init(key: key, defaultValue: nil, storage: storage)
     }
 }
 
